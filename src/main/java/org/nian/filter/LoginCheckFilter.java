@@ -46,20 +46,17 @@ public class LoginCheckFilter implements Filter {
         boolean check = check(urls, requestURI);
         //如果是不需要被拦截的请求，直接放行
         if (check){
-            log.info("本次请求：{}，不需要处理",requestURI);
             //让请求继续走
             filterChain.doFilter(request, response);
             return;
         }
         //如果是需要被拦截的请求，判断是否已经登录
         if (request.getSession().getAttribute("employee") != null) {
-            log.info("用户已登录，id为{}",request.getSession().getAttribute("employee"));
+            long id = Thread.currentThread().getId();
             filterChain.doFilter(request,response);
             return;
         }
         //如果没有登录，返回错误信息,通过输出流方式向客户端页面响应数据
-        log.info("用户未登录");
-        log.info("用户id{}",request.getSession().getAttribute("employee"));
         response.getWriter().write(JSON.toJSONString(Result.error("NOTLOGIN")));
     }
 }
