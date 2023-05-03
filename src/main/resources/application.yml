@@ -14,4 +14,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: assign_id
+
+reggie:
+  path: D:\
 #    type: com.alibaba.druid.pool.DruidDataSource

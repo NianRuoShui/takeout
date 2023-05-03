@@ -12,7 +12,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
@@ -55,13 +54,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     public Result<String> save_employee(HttpServletRequest request, Employee employee) {
         // 为新用户设置初始密码，并进行 MD5 加密
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        // 设置创建时间和更新时间
 //        LocalDateTime now = LocalDateTime.now();
 //        employee.setCreateTime(now);
 //        employee.setUpdateTime(now);
-//         从 Session 中获取创建用户的 ID
 //        Long createId = (Long) request.getSession().getAttribute("employee");
-//         设置创建用户 ID 和更新用户 ID
 //        employee.setCreateUser(createId);
 //        employee.setUpdateUser(createId);
         // 保存新用户,this是EmployeeServiceImpl的实例，有save方法
@@ -96,7 +92,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public Result<Employee> get_employee_byid(@PathVariable Long id){
         Employee employee = this.getById(id);
-        return Result.success(employee);
+        if (employee != null) {
+            return Result.success(employee);
+        }
+        return Result.error("未查询到该员工信息");
     }
 
 }
